@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "org.thundernetwork"
-version = "1.0.0"
+version = "1.0.2"
 
 repositories {
     maven("https://repository.thundernetwork.org/repository/maven-public")
@@ -19,6 +19,7 @@ java {
 }
 
 dependencies {
+    implementation(kotlin("stdlib"))
     // testImplementation(kotlin("test"))
 }
 
@@ -26,12 +27,12 @@ tasks.test {
     useJUnitPlatform()
 }
 
-//tasks.jar {
-//    from(sourceSets.main) // Include all source code in the JAR
-//    manifest {
-//        attributes(mapOf("Main-Class" to "org.thundernetwork.sitemap"))
-//    }
-//}
+tasks.jar {
+    from(sourceSets.main.get().allSource)
+    manifest {
+        attributes(mapOf("Main-Class" to "org.thundernetwork.sitemapKt"))
+    }
+}
 
 publishing {
     repositories {
@@ -45,6 +46,8 @@ publishing {
     }
     publications {
         create<MavenPublication>("mavenJava") {
+            from(components["java"])
+
             pom {
                 name = "Sitemap"
                 description = "A simply collection of utils for sitemap creation written in Kotlin"
