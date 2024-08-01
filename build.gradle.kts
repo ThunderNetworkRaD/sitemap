@@ -4,10 +4,18 @@ plugins {
 }
 
 group = "org.thundernetwork"
-version = "1.0"
+version = "1.0.0"
 
 repositories {
     maven("https://repository.thundernetwork.org/repository/maven-public")
+}
+
+kotlin {
+    jvmToolchain(17)
+}
+
+java {
+    withSourcesJar()
 }
 
 dependencies {
@@ -17,9 +25,13 @@ dependencies {
 tasks.test {
     useJUnitPlatform()
 }
-kotlin {
-    jvmToolchain(17)
-}
+
+//tasks.jar {
+//    from(sourceSets.main) // Include all source code in the JAR
+//    manifest {
+//        attributes(mapOf("Main-Class" to "org.thundernetwork.sitemap"))
+//    }
+//}
 
 publishing {
     repositories {
