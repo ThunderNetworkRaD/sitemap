@@ -2,7 +2,7 @@ package org.thundernetwork.sitemap
 
 import org.thundernetwork.sitemap.models.UrlEntry
 
-fun main() {
+fun test() {
     val large = true  // Imposta questo valore in base alle tue esigenze
     val path = "sitemaps.xml"  // Imposta il percorso dove salvare le sitemaps
 

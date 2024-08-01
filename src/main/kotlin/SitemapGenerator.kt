@@ -10,10 +10,24 @@ import javax.xml.transform.TransformerFactory
 import javax.xml.transform.dom.DOMSource
 import javax.xml.transform.stream.StreamResult
 
+/**
+ * A class for generating sitemaps.
+ *
+ * @param large whether to generate a large sitemap
+ * @param path the path to the sitemap file
+ */
 class SitemapGenerator(private val large: Boolean, private val path: String) {
 
     private val urlEntries = mutableListOf<UrlEntry>()
 
+    /**
+     * Loads a sitemap from the specified file path and parses it into a list of UrlEntry objects.
+     *
+     * @param filePath the path to the sitemap file
+     * @throws ParserConfigurationException if a DocumentBuilder cannot be created which satisfies the configuration requested
+     * @throws IOException if any I/O errors occur
+     * @throws SAXException if any parse errors occur
+     */
     fun loadSitemap(filePath: String) {
         val docFactory = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val doc: Document = docFactory.parse(File(filePath))
@@ -23,22 +37,35 @@ class SitemapGenerator(private val large: Boolean, private val path: String) {
             val urlElement = urlNodes.item(i) as Element
 
             val loc = urlElement.getElementsByTagName("loc").item(0).textContent
-            val lastmod = urlElement.getElementsByTagName("lastmod")?.item(0)?.textContent
-            val changefreq = urlElement.getElementsByTagName("changefreq")?.item(0)?.textContent
-            val priority = urlElement.getElementsByTagName("priority")?.item(0)?.textContent?.toDouble()
+            val lastmod = urlElement.getElementsByTagName("lastmod").item(0)?.textContent
+            val changefreq = urlElement.getElementsByTagName("changefreq").item(0)?.textContent
+            val priority = urlElement.getElementsByTagName("priority").item(0)?.textContent?.toDouble()
 
             urlEntries.add(UrlEntry(loc, lastmod, changefreq, priority))
         }
     }
 
+    /**
+     * Adds a new UrlEntry to the sitemap.
+     *
+     * @param urlEntry the UrlEntry to add
+     */
     fun addUrl(urlEntry: UrlEntry) {
         urlEntries.add(urlEntry)
     }
 
+    /**
+     * Removes a UrlEntry from the sitemap.
+     *
+     * @param loc the location of the UrlEntry to remove
+     */
     fun removeUrl(loc: String) {
         urlEntries.removeAll { it.loc == loc }
     }
 
+    /**
+     * Generates the sitemap.
+     */
     fun generateSitemap() {
         if (large && urlEntries.size > 10000) {
             generateLargeSitemap()
@@ -47,6 +74,11 @@ class SitemapGenerator(private val large: Boolean, private val path: String) {
         }
     }
 
+    /**
+     * Generates a single sitemap.
+     *
+     * @param filePath the path to the sitemap file
+     */
     private fun generateSingleSitemap(filePath: String) {
         val docFactory = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         val doc: Document = docFactory.newDocument()
@@ -93,6 +125,9 @@ class SitemapGenerator(private val large: Boolean, private val path: String) {
         transformer.transform(source, result)
     }
 
+    /**
+     * Generates a large sitemap.
+     */
     private fun generateLargeSitemap() {
         val dir = File(path)
         if (!dir.exists()) {
