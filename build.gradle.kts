@@ -7,7 +7,7 @@ group = "org.thundernetwork"
 version = "1.0.2"
 
 repositories {
-    maven("https://repository.thundernetwork.org/repository/maven-public")
+    maven("https://repository.thundernetwork.org/repository/maven-central/")
 }
 
 kotlin {
@@ -36,11 +36,16 @@ tasks.jar {
 
 publishing {
     repositories {
-        maven {
-            url = uri("https://repository.thundernetwork.org/repository/maven-releases")
-            credentials {
-                username = System.getenv("REPOSITORY_USERNAME")
-                password = System.getenv("REPOSITORY_PASSWORD")
+        publishing {
+            repositories {
+                maven {
+                    name = "GitHub"
+                    url = uri("https://maven.pkg.github.com/ThunderNetworkRaD/permission-checker")
+                    credentials {
+                        username = System.getenv("REPOSITORY_USERNAME")
+                        password = System.getenv("REPOSITORY_PASSWORD")
+                    }
+                }
             }
         }
     }
