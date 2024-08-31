@@ -40,10 +40,10 @@ publishing {
             repositories {
                 maven {
                     name = "GitHub"
-                    url = uri("https://maven.pkg.github.com/ThunderNetworkRaD/permission-checker")
+                    url = uri("https://maven.pkg.github.com/ThunderNetworkRaD/sitemap")
                     credentials {
-                        username = System.getenv("REPOSITORY_USERNAME")
-                        password = System.getenv("REPOSITORY_PASSWORD")
+                        username = System.getenv("GITHUB_ACTOR")
+                        password = System.getenv("GITHUB_TOKEN")
                     }
                 }
             }
